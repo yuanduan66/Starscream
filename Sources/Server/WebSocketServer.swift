@@ -40,6 +40,42 @@ public class WebSocketServer: Server, ConnectionDelegate {
     public func start(address: String, port: UInt16) -> Error? {
         //TODO: support TLS cert adding/binding
         let parameters = NWParameters(tls: nil, tcp: NWProtocolTCP.Options())
+        return start(address: address, port: port, configure: parameters)
+//        let p = NWEndpoint.Port(rawValue: port)!
+//        parameters.requiredLocalEndpoint = NWEndpoint.hostPort(host: NWEndpoint.Host.name(address, nil), port: p)
+//        
+//        guard let listener = try? NWListener(using: parameters, on: p) else {
+//            return WSError(type: .serverError, message: "unable to start the listener at: \(address):\(port)", code: 0)
+//        }
+//        listener.newConnectionHandler = {[weak self] conn in
+//            let transport = TCPTransport(connection: conn)
+//            let c = ServerConnection(transport: transport)
+//            c.delegate = self
+//            self?.connections[c.uuid] = c
+//        }
+////        listener.stateUpdateHandler = { state in
+////            switch state {
+////            case .ready:
+////                print("ready to get sockets!")
+////            case .setup:
+////                print("setup to get sockets!")
+////            case .cancelled:
+////                print("server cancelled!")
+////            case .waiting(let error):
+////                print("waiting error: \(error)")
+////            case .failed(let error):
+////                print("server failed: \(error)")
+////            @unknown default:
+////                print("wat?")
+////            }
+////        }
+//        self.listener = listener
+//        listener.start(queue: queue)
+//        return nil
+    }
+    public func start(address: String, port: UInt16, configure: NWParameters) -> Error? {
+        //TODO: support TLS cert adding/binding
+        var parameters = configure
         let p = NWEndpoint.Port(rawValue: port)!
         parameters.requiredLocalEndpoint = NWEndpoint.hostPort(host: NWEndpoint.Host.name(address, nil), port: p)
         
